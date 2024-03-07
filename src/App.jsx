@@ -3,8 +3,18 @@ import { Route, Routes } from "react-router-dom";
 
 import { Header } from "./components";
 import { Home, FullPost, Registration, AddPost, Login } from "./pages";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { isAuthorized, userGetData } from "./redux/slices/auth";
 
 function App() {
+  const dispatch = useDispatch();
+  const isAuth = useSelector(isAuthorized);
+
+  useEffect(() => {
+    dispatch(userGetData());
+  }, []);
+  
   return (
     <>
       <Header />
