@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 import styles from "./Post.module.scss";
 import { UserInfo } from "../UserInfo";
 import { PostSkeleton } from "./Skeleton";
+import { useDispatch } from "react-redux";
+import { deletePosts } from "../../redux/slices/post";
 
 export const Post = ({
   id,
@@ -25,7 +27,13 @@ export const Post = ({
   isLoading,
   isEditable,
 }) => {
-  const onClickRemove = () => {};
+  const dispatch = useDispatch();
+
+  const onClickRemove = () => {
+    if (window.confirm("Вы действительно хотите удалить статью?")) {
+      dispatch(deletePosts(id));
+    }
+  };
 
   if (isLoading) {
     return <PostSkeleton />;
@@ -58,10 +66,10 @@ export const Post = ({
           <h2
             className={clsx(styles.title, { [styles.titleFull]: isFullPost })}
           >
-            {isFullPost ? title : <a href={`/posts/${id}`}>{title}</a>}
+            {isFullPost ? title : <Link to={`/posts/${id}`}>{title}</Link>}
           </h2>
           <ul className={styles.tags}>
-            {tags.map((name) => (
+            {tags?.map((name) => (
               <li key={name}>
                 <Link to={`/tag/${name}`}>#{name}</Link>
               </li>

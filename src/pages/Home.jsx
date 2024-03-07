@@ -35,28 +35,25 @@ export const Home = () => {
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
-          {(isPostsLoading ? [...Array(5)] : posts.items).map((post, index) =>
-            isPostsLoading ? (
-              <Post key={index} isLoading={true} />
-            ) : (
-              <Post
-                key={post.id}
-                id={post._id}
-                title={post.title}
-                imageUrl={
-                  post.imageUrl
-                    ? `${process.env.REACT_APP_API_URL}${post.imageUrl}`
-                    : ""
-                }
-                user={post.user}
-                createdAt={post.createdAt}
-                viewsCount={post.viewsCount}
-                commentsCount={3}
-                tags={post.tags}
-                isEditable={userData?._id === post?.user._id}
-              />
-            )
-          )}
+          {isPostsLoading
+            ? [...Array(5)].map((_, index) => (
+                <Post key={index} isLoading={true} />
+              ))
+            : posts.items.length > 0 &&
+              posts.items.map((post) => (
+                <Post
+                  key={post._id}
+                  id={post._id}
+                  title={post.title}
+                  imageUrl={post.imageUrl ? `${post.imageUrl}` : ""}
+                  user={post.user}
+                  createdAt={post.createdAt}
+                  viewsCount={post.viewsCount}
+                  commentsCount={3}
+                  tags={post.tags}
+                  isEditable={userData?._id === post?.user._id}
+                />
+              ))}
         </Grid>
         <Grid xs={4} item>
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />

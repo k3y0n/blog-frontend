@@ -5,6 +5,7 @@ import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
 import { useParams } from "react-router-dom";
 import api from "../axios";
+import ReactMarkdown from "react-markdown";
 
 export const FullPost = () => {
   const { id } = useParams();
@@ -14,8 +15,8 @@ export const FullPost = () => {
   useEffect(() => {
     api
       .get(`/posts/${id}`)
-      .then((res) => {
-        setData(res);
+      .then(({ data }) => {
+        setData(data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -32,11 +33,7 @@ export const FullPost = () => {
       <Post
         id={data?._id}
         title={data?.title}
-        imageUrl={
-          data?.imageUrl
-            ? `${process.env.REACT_APP_API_URL}${data?.imageUrl}`
-            : ""
-        }
+        imageUrl={data?.imageUrl ? `${data?.imageUrl}` : ""}
         user={data?.user}
         createdAt={data?.createdAt}
         viewsCount={data?.viewsCount}
@@ -44,7 +41,7 @@ export const FullPost = () => {
         tags={data?.tags}
         isEditable
       >
-        <p>{data?.text}</p>
+        <ReactMarkdown children={data.text} />
       </Post>
       <CommentsBlock
         items={[
